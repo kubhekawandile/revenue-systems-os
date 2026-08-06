@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root { --background: 248 250 252; --foreground: 15 23 42; }
+  * { @apply border-slate-200; }
+  body { @apply bg-slate-50 text-slate-900 antialiased; }
+}
+
+@layer utilities {
+  .page-enter { animation: page-enter .35s ease-out; }
+  @keyframes page-enter { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+}
