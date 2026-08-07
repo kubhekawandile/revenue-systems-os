@@ -3,19 +3,34 @@
  * field placeholders; authored learning content is added in a later phase.
  */
 export type MentorStatus = "Not assigned" | "Ready for review" | "Reviewed";
+export type DeliverableStatus = "Not Started" | "In Progress" | "Submitted" | "Approved";
+export type WeekStatus = "Locked" | "Unlocked" | "Completed" | "Approved";
+
+export type ChecklistItem = { label: string; completed: boolean };
+export type Deliverable = { title: string; status: DeliverableStatus };
+export type ClientEngagement = {
+  client: string;
+  industry: string;
+  companySize: string;
+  engagementType: string;
+  yourRole: string;
+};
 
 export type CurriculumWeek = {
   week: number;
   title: string;
   identityProgression: string;
-  objectives: string[];
+  objectives: ChecklistItem[];
   businessContext: string;
   consultingBrief: string;
   client: string;
-  deliverables: string[];
+  clientEngagement: ClientEngagement;
+  deliverables: Deliverable[];
   portfolioArtifact: string;
+  portfolio: { uploadedArtifacts: string; githubRepository: string; loomWalkthrough: string; miroBoard: string; executivePresentation: string };
   decisionJournal: string;
   revenueImpact: string;
+  mentorReview: { status: MentorStatus; feedback: string; approval: string; revisionRequired: string };
   mentorStatus: MentorStatus;
   locked: boolean;
   completed: boolean;
@@ -30,21 +45,27 @@ export type CurriculumPhase = {
 const placeholder = "Content placeholder";
 
 function createWeek(week: number): CurriculumWeek {
+  const locked = week > 2;
+  const completed = week === 1;
+  const mentorStatus: MentorStatus = completed ? "Reviewed" : "Not assigned";
   return {
     week,
     title: `Week ${String(week).padStart(2, "0")}`,
     identityProgression: placeholder,
-    objectives: [placeholder],
+    objectives: [{ label: "Objective placeholder", completed: false }],
     businessContext: placeholder,
     consultingBrief: placeholder,
     client: "Client placeholder",
-    deliverables: ["Deliverable placeholder"],
+    clientEngagement: { client: "Client placeholder", industry: "Industry placeholder", companySize: "Company size placeholder", engagementType: "Engagement type placeholder", yourRole: "Role placeholder" },
+    deliverables: [{ title: "Deliverable placeholder", status: "Not Started" }],
     portfolioArtifact: placeholder,
+    portfolio: { uploadedArtifacts: "Artifact placeholder", githubRepository: "Repository placeholder", loomWalkthrough: "Walkthrough placeholder", miroBoard: "Board placeholder", executivePresentation: "Presentation placeholder" },
     decisionJournal: placeholder,
     revenueImpact: placeholder,
-    mentorStatus: week === 1 ? "Reviewed" : "Not assigned",
-    locked: week > 2,
-    completed: week === 1,
+    mentorReview: { status: mentorStatus, feedback: placeholder, approval: placeholder, revisionRequired: placeholder },
+    mentorStatus,
+    locked,
+    completed,
   };
 }
 
@@ -63,7 +84,20 @@ export const completedWeeks = curriculumWeeks.filter(({ completed }) => complete
 export const currentWeek = curriculumWeeks.find(({ completed, locked }) => !completed && !locked) ?? curriculumWeeks.at(-1)!;
 export const currentPhase = currentWeek.phase;
 export const completionPercentage = Math.round((completedWeeks.length / curriculumWeeks.length) * 100);
-export const nextMilestone = currentWeek.deliverables[0];
+export const nextMilestone = currentWeek.deliverables[0].title;
+
+export function getWeekStatus(week: CurriculumWeek): WeekStatus {
+  if (week.locked) return "Locked";
+  if (week.mentorReview.approval !== placeholder) return "Approved";
+  if (week.completed) return "Completed";
+  return "Unlocked";
+}
+
+export function getWeekCompletion(week: CurriculumWeek) {
+  const total = week.objectives.length + week.deliverables.length;
+  const complete = week.objectives.filter((item) => item.completed).length + week.deliverables.filter((item) => item.status === "Approved").length;
+  return total ? Math.round((complete / total) * 100) : 0;
+}
 
 export const engagements = [
   { client: "Northstar Analytics", industry: "B2B SaaS", status: "In progress", artifacts: 3, reflection: "Mapping the handoff between demand generation and sales." },
