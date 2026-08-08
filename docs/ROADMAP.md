@@ -20,11 +20,15 @@ Implemented a dedicated, route-addressable consulting workspace for each curricu
 
 Implemented evidence-based portfolio entries organised as Portfolio → Phase → Week → Portfolio Entry. Each week has a placeholder portfolio entry with artifact status, evidence, reflection, business impact, communication, and mentor-review fields. Dashboard portfolio signals are derived from the curriculum portfolio data.
 
+### v1.4 — Consulting Workspace
+
+Transformed the weekly Learning Workspace into a structured, local consulting engagement workspace. The curriculum model now supports client context, consulting brief, business-problem diagnosis, business process, system design, technical implementation, practical application, decision records, structured deliverables, engagement status, and a local consulting-review workflow.
+
+The workspace uses the existing Portfolio Entry as its portfolio source of truth rather than duplicating portfolio evidence. New Week 2–30 consulting fields remain empty and import-ready; no future-week learning content, client work, or review results were generated. The review workflow is a local status structure only: no AI API, automated review, backend, or integration has been implemented.
+
+Dashboard and Progress now derive current engagement information, engagement counts, and review-stage progress from the curriculum model.
+
 ## Planned
-
-### v1.4 — Evidence & Work Capture (planned)
-
-Introduce the next local-first workflow needed to record or reference apprenticeship evidence more directly. Scope should be defined from actual apprenticeship use before implementation; no upload or external integration capability is currently implemented.
 
 ### v1.5 — Decision Journal & Mentorship (planned)
 
