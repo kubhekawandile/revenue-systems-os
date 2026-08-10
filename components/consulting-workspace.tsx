@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight, CheckCircle2, ClipboardList, FileText, Layers3, Target } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { RuntimeWorkspaceControls } from "@/components/runtime-workspace-controls";
 import { getWeekCompletion, getWeekStatus, type CurriculumPhase, type CurriculumWeek } from "@/data/platform";
 
 const emptyState = "Not yet populated";
@@ -40,7 +41,7 @@ export function ConsultingWorkspace({ week, phase }: { week: CurriculumWeek; pha
       <Section title="10. Portfolio" description="Portfolio data is read from this week’s existing Portfolio Entry; it is not duplicated here."><FieldGrid fields={portfolioFields}/><Link href="/portfolio" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-slate-700">Open portfolio entry <ArrowUpRight size={14}/></Link></Section>
       <Section title="11. Consulting Review" description="Local review stages only. AI Architecture Review does not make an AI API call."><div className="mb-4"><FieldGrid fields={[["Quality criteria", engagement.qualityReview.criteria], ["Quality findings", engagement.qualityReview.findings], ["Remediation", engagement.qualityReview.remediation]]}/></div><div className="space-y-2">{engagement.reviewWorkflow.map((stage) => <div key={stage.stage} className="flex items-center justify-between rounded-lg border bg-slate-50 p-3 text-sm"><span>{stage.stage}</span><Badge>{stage.completed ? "Complete" : "Not started"}</Badge></div>)}</div><Link href={`/curriculum/week-${String(week.week).padStart(2, "0")}/review`} className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-slate-700">Open review workspace <ArrowUpRight size={14}/></Link></Section>
       <Section title="12. Engagement Status"><div className="flex items-center justify-between"><div><p className="text-2xl font-semibold">{engagement.status}</p><p className="mt-1 text-sm text-slate-500">Status is controlled by the local curriculum engagement model.</p></div><Badge>{status}</Badge></div></Section>
-    </div>
+    </div><RuntimeWorkspaceControls week={week.week} surface="consulting"/>
   </>;
 }
 

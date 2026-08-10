@@ -40,6 +40,12 @@ Implemented a dedicated, route-addressable Review Workspace for every weekly con
 
 Consulting and Communication Workspaces link to their corresponding Review Workspace. Dashboard and Progress derive review state, revision, approval, and production-ready metrics from the local model. Review stages, including AI Architecture Review, are status-only records: no AI capability, API, backend, integration, upload, or fictional feedback has been added. Portfolio remains the source of truth for final portfolio artifacts and evidence.
 
+### v1.7 — Functional Workspace / Data Persistence
+
+Implemented a versioned local browser persistence repository for learner runtime state, including active-week selection, imported source material, workspace notes, evidence references, and portfolio-link metadata. Weekly Consulting, Communication, and Review Workspaces now provide explicit save feedback, source import/preview, active-week selection, and functional add/remove reference actions.
+
+The current durable storage layer is browser local storage, selected as a reliable local fallback because the bundled Node runtime cannot build the native SQLite binding. Supported imports are `.md`, `.txt`, and `.json`; uploads, external integrations, full field-level editors, automated review, and database-backed multi-process persistence remain deferred.
+
 ## Planned
 
 ### Decision Journal & Mentorship (planned)

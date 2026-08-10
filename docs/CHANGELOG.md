@@ -2,6 +2,14 @@
 
 All notable completed changes to Revenue Systems OS are documented here. Planned work belongs in [ROADMAP.md](ROADMAP.md) and is not listed as completed.
 
+## v1.7 — Functional Workspace / Data Persistence
+
+- Added a versioned local runtime repository that persists active-week state, imported source metadata/content, workspace notes, and evidence references in browser local storage.
+- Added safe `.md`, `.txt`, and `.json` import with file-size limits, source preview, and replace confirmation.
+- Added explicit save feedback, active-week selection, and functional add/remove evidence-reference actions in weekly workspaces.
+- Added a local usage guide and excluded future runtime data from Git.
+- Deferred native SQLite after the bundled Node runtime could not build the native dependency; no backend, database service, authentication, external API, integration, upload, or AI API was introduced.
+
 ## v1.6 — Mentor / Review OS
 
 - Added an import-ready Mentor / Review record to every weekly consulting engagement.
