@@ -1,5 +1,13 @@
 # Revenue Systems OS — Usage Guide
 
+## Guided weekly flow
+
+For each week, use the same local-first flow: **Import Week → Set Active → Start/Continue → Learn → enter My Work → Save → attach evidence → Mark Step Complete → Review → Complete**.
+
+Imported source text is read-only. Revenue Systems OS uses its headings and section names to surface relevant instructions in the Consulting, Communication, Review, and Decision Journal areas; learner responses remain separate in browser-local runtime data.
+
+Complete learning steps to move a week to **REVIEW**. Record approval in the Review Workspace to make the runtime status **COMPLETE**. Navigation and saving alone do not change progress.
+
 ## Start the app
 
 Install dependencies with `pnpm install`, then run `pnpm dev` from the project folder. Open the local URL displayed by Next.js.
