@@ -2,6 +2,15 @@
 
 All notable completed changes to Revenue Systems OS are documented here. Planned work belongs in [ROADMAP.md](ROADMAP.md) and is not listed as completed.
 
+## v1.6 — Mentor / Review OS
+
+- Added an import-ready Mentor / Review record to every weekly consulting engagement.
+- Added a dedicated weekly Review Workspace route and links from Consulting and Communication Workspaces.
+- Added local review-loop structures for submission, critique, learner defense, revision, re-review, and approval.
+- Added model-driven fields for the eight formal consulting review stages, review status, revisions, approval, production-ready status, and reference metadata.
+- Added dashboard and Progress metrics derived from local review records.
+- Kept AI Architecture Review as a status-only stage; no AI/API capability, integrations, uploads, backend, database, authentication, or fictional mentor feedback was added.
+
 ## v1.5 — Communication Workspace
 
 - Added an import-ready Communication Workspace structure to every weekly consulting engagement.

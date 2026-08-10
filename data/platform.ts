@@ -9,6 +9,7 @@ export type PortfolioArtifactStatus = "Not Started" | "Draft" | "Complete" | "Ap
 export type EngagementStatus = "Not Started" | "Discovery" | "Analysis" | "Design" | "Implementation" | "Review" | "Revision" | "Approved" | "Production Ready";
 export type CommunicationStatus = "Not Started" | "In Progress" | "Ready for Review" | "Approved";
 export type CommunicationEvidenceStatus = "Not Started" | "Captured" | "Reviewed" | "Approved";
+export type ReviewStatus = "Not Started" | "Ready for Review" | "In Review" | "Revision Required" | "Revised" | "Approved" | "Complete";
 export type ReviewStageName = "Implementation" | "Self Review" | "AI Architecture Review" | "Business Review" | "Revision" | "Documentation Audit" | "Portfolio Approval" | "Production Ready";
 export type ConsultingStage = "Business Problem" | "Business Process" | "System Design" | "Data Architecture" | "Automation" | "AI Augmentation" | "Measurement" | "Communication" | "Continuous Improvement" | "Production-Ready Delivery" | "Continuous Quality Assurance" | "Business & Commercial Validation";
 
@@ -57,11 +58,26 @@ export type ConsultingEngagement = {
   };
   decisionJournal: { decision: string; context: string; optionsConsidered: string; chosenOption: string; reasoning: string; tradeoffs: string; expectedImpact: string; actualImpact: string; lessonLearned: string };
   qualityReview: { criteria: string; findings: string; remediation: string };
+  review: MentorReviewRecord;
   reviewWorkflow: { stage: ReviewStageName; completed: boolean }[];
   applicableStages: Partial<Record<ConsultingStage, string>>;
 };
 
 export type CommunicationEvidence = { type: string; title: string; description: string; reference: string; notes: string; date: string; status: CommunicationEvidenceStatus };
+export type MentorReviewRecord = {
+  reviewObjective: string;
+  artifactUnderReview: string;
+  currentStage: ReviewStageName;
+  reviewerType: string;
+  reviewStatus: ReviewStatus;
+  reviewDate: string;
+  critique: { strengths: string; issuesRisks: string; questionsChallenges: string };
+  learnerDefense: { response: string; reasoning: string; tradeoffs: string };
+  revision: { requiredRevisions: string; revisionNotes: string; revisionStatus: ReviewStatus };
+  reReview: { status: ReviewStatus; remainingConcerns: string; outcome: string };
+  approval: { decision: string; notes: string; productionReadyStatus: ReviewStatus };
+  evidence: { type: string; title: string; description: string; reference: string; notes: string; date: string; status: ReviewStatus }[];
+};
 
 export type CurriculumWeek = {
   week: number;
@@ -147,6 +163,15 @@ function createWeek(week: number): CurriculumWeek {
       },
       decisionJournal,
       qualityReview: { criteria: empty, findings: empty, remediation: empty },
+      review: {
+        reviewObjective: empty, artifactUnderReview: empty, currentStage: "Implementation", reviewerType: empty, reviewStatus: "Not Started", reviewDate: empty,
+        critique: { strengths: empty, issuesRisks: empty, questionsChallenges: empty },
+        learnerDefense: { response: empty, reasoning: empty, tradeoffs: empty },
+        revision: { requiredRevisions: empty, revisionNotes: empty, revisionStatus: "Not Started" },
+        reReview: { status: "Not Started", remainingConcerns: empty, outcome: empty },
+        approval: { decision: empty, notes: empty, productionReadyStatus: "Not Started" },
+        evidence: ["Miro", "Loom", "GitHub", "HubSpot / CRM screenshot", "SQL / database work", "Dashboard", "Document", "Presentation", "Communication artifact"].map((type) => ({ type, title: empty, description: empty, reference: empty, notes: empty, date: empty, status: "Not Started" })),
+      },
       reviewWorkflow: reviewStages.map((stage) => ({ stage, completed: false })),
       applicableStages: {},
     },
@@ -176,6 +201,13 @@ export const nextMilestone = currentWeek.deliverables[0].title;
 
 export const currentEngagement = currentWeek.engagement;
 export const nextReviewStage = currentEngagement.reviewWorkflow.find(({ completed }) => !completed)?.stage ?? "No review stage available";
+export const currentReview = currentEngagement.review;
+export const nextReviewAction = currentReview.reviewStatus === "Revision Required" ? "Address required revisions" : currentReview.reviewStatus === "Approved" ? "Complete production-ready review" : "Prepare submission for review";
+export const outstandingRevisions = curriculumWeeks.filter(({ engagement }) => engagement.review.revision.revisionStatus === "Revision Required");
+export const reviewsCompleted = curriculumWeeks.filter(({ engagement }) => engagement.review.reviewStatus === "Complete");
+export const revisionsCompleted = curriculumWeeks.filter(({ engagement }) => engagement.review.revision.revisionStatus === "Revised" || engagement.review.revision.revisionStatus === "Complete");
+export const approvalsCompleted = curriculumWeeks.filter(({ engagement }) => engagement.review.approval.productionReadyStatus === "Approved" || engagement.review.approval.productionReadyStatus === "Complete");
+export const productionReadyWeeks = curriculumWeeks.filter(({ engagement }) => engagement.review.approval.productionReadyStatus === "Complete");
 export const engagementWeeks = curriculumWeeks.filter(({ engagement }) => engagement.status !== "Not Started");
 export const completedEngagements = curriculumWeeks.filter(({ engagement }) => engagement.status === "Production Ready");
 export const approvedEngagements = curriculumWeeks.filter(({ engagement }) => engagement.status === "Approved" || engagement.status === "Production Ready");

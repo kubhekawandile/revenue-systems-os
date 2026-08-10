@@ -34,6 +34,12 @@ Implemented a dedicated, route-addressable Communication Workspace for every wee
 
 Communication working context is connected to the consulting workspace and dashboard/progress calculations. Portfolio remains the source of truth for resulting portfolio artifacts and evidence. No communication content, stakeholder scenarios, external integrations, file uploads, automated review, or AI API was implemented.
 
+### v1.6 — Mentor / Review OS
+
+Implemented a dedicated, route-addressable Review Workspace for every weekly consulting engagement. The local engagement model now contains empty review context, critique, learner defense, revision, re-review, approval, and reference metadata fields, plus a status-based representation of the formal consulting review workflow.
+
+Consulting and Communication Workspaces link to their corresponding Review Workspace. Dashboard and Progress derive review state, revision, approval, and production-ready metrics from the local model. Review stages, including AI Architecture Review, are status-only records: no AI capability, API, backend, integration, upload, or fictional feedback has been added. Portfolio remains the source of truth for final portfolio artifacts and evidence.
+
 ## Planned
 
 ### Decision Journal & Mentorship (planned)
