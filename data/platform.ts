@@ -7,6 +7,8 @@ export type DeliverableStatus = "Not Started" | "In Progress" | "Submitted" | "A
 export type WeekStatus = "Locked" | "Unlocked" | "Completed" | "Approved";
 export type PortfolioArtifactStatus = "Not Started" | "Draft" | "Complete" | "Approved";
 export type EngagementStatus = "Not Started" | "Discovery" | "Analysis" | "Design" | "Implementation" | "Review" | "Revision" | "Approved" | "Production Ready";
+export type CommunicationStatus = "Not Started" | "In Progress" | "Ready for Review" | "Approved";
+export type CommunicationEvidenceStatus = "Not Started" | "Captured" | "Reviewed" | "Approved";
 export type ReviewStageName = "Implementation" | "Self Review" | "AI Architecture Review" | "Business Review" | "Revision" | "Documentation Audit" | "Portfolio Approval" | "Production Ready";
 export type ConsultingStage = "Business Problem" | "Business Process" | "System Design" | "Data Architecture" | "Automation" | "AI Augmentation" | "Measurement" | "Communication" | "Continuous Improvement" | "Production-Ready Delivery" | "Continuous Quality Assurance" | "Business & Commercial Validation";
 
@@ -42,11 +44,24 @@ export type ConsultingEngagement = {
   systemDesign: { systemOverview: string; architectureNotes: string; components: string; dependencies: string; tradeoffs: string; designDecisions: string; architectureArtifact: string };
   technicalImplementation: { implementationObjective: string; tasks: ChecklistItem[]; status: DeliverableStatus; tools: string; configuration: string; implementationNotes: string; technicalEvidence: string };
   practicalApplication: { exercise: string; instructions: string; output: string; judgmentExercise: string; revenueImpact: string; reflection: string };
+  communication: {
+    status: CommunicationStatus;
+    objective: { objective: string; purpose: string; desiredOutcome: string };
+    audience: { audience: string; stakeholder: string; stakeholderRole: string; communicationLevel: string; decisionMaker: string };
+    context: { situation: string; context: string; businessRelevance: string; informationRequired: string; decisionOrActionRequired: string };
+    writtenCommunication: { consultingUpdate: string; executiveSummary: string; recommendation: string; stakeholderMessage: string; meetingFollowUp: string; writtenExplanation: string };
+    presentation: { presentation: string; demo: string; walkthrough: string; loomWalkthrough: string; miroWalkthrough: string; verbalExplanation: string };
+    evidence: CommunicationEvidence[];
+    reflection: { communicatedWell: string; unclear: string; audienceResponse: string; improvements: string; nextTime: string; keyLesson: string };
+    review: { clarity: string; structure: string; businessRelevance: string; audienceAwareness: string; technicalExplanation: string; recommendationQuality: string; confidence: string; mentorFeedback: string; reviewStatus: CommunicationStatus };
+  };
   decisionJournal: { decision: string; context: string; optionsConsidered: string; chosenOption: string; reasoning: string; tradeoffs: string; expectedImpact: string; actualImpact: string; lessonLearned: string };
   qualityReview: { criteria: string; findings: string; remediation: string };
   reviewWorkflow: { stage: ReviewStageName; completed: boolean }[];
   applicableStages: Partial<Record<ConsultingStage, string>>;
 };
+
+export type CommunicationEvidence = { type: string; title: string; description: string; reference: string; notes: string; date: string; status: CommunicationEvidenceStatus };
 
 export type CurriculumWeek = {
   week: number;
@@ -119,6 +134,17 @@ function createWeek(week: number): CurriculumWeek {
       systemDesign: { systemOverview: empty, architectureNotes: empty, components: empty, dependencies: empty, tradeoffs: empty, designDecisions: empty, architectureArtifact: empty },
       technicalImplementation: { implementationObjective: empty, tasks: [{ label: "Implementation task placeholder", completed: false }], status: "Not Started", tools: empty, configuration: empty, implementationNotes: empty, technicalEvidence: empty },
       practicalApplication: { exercise: empty, instructions: empty, output: empty, judgmentExercise: empty, revenueImpact: empty, reflection: empty },
+      communication: {
+        status: "Not Started",
+        objective: { objective: empty, purpose: empty, desiredOutcome: empty },
+        audience: { audience: empty, stakeholder: empty, stakeholderRole: empty, communicationLevel: empty, decisionMaker: empty },
+        context: { situation: empty, context: empty, businessRelevance: empty, informationRequired: empty, decisionOrActionRequired: empty },
+        writtenCommunication: { consultingUpdate: empty, executiveSummary: empty, recommendation: empty, stakeholderMessage: empty, meetingFollowUp: empty, writtenExplanation: empty },
+        presentation: { presentation: empty, demo: empty, walkthrough: empty, loomWalkthrough: empty, miroWalkthrough: empty, verbalExplanation: empty },
+        evidence: ["Screenshot", "Document", "Presentation", "Miro board", "Loom walkthrough", "Diagram", "Recording", "Other evidence"].map((type) => ({ type, title: empty, description: empty, reference: empty, notes: empty, date: empty, status: "Not Started" })),
+        reflection: { communicatedWell: empty, unclear: empty, audienceResponse: empty, improvements: empty, nextTime: empty, keyLesson: empty },
+        review: { clarity: empty, structure: empty, businessRelevance: empty, audienceAwareness: empty, technicalExplanation: empty, recommendationQuality: empty, confidence: empty, mentorFeedback: empty, reviewStatus: "Not Started" },
+      },
       decisionJournal,
       qualityReview: { criteria: empty, findings: empty, remediation: empty },
       reviewWorkflow: reviewStages.map((stage) => ({ stage, completed: false })),
@@ -154,6 +180,11 @@ export const engagementWeeks = curriculumWeeks.filter(({ engagement }) => engage
 export const completedEngagements = curriculumWeeks.filter(({ engagement }) => engagement.status === "Production Ready");
 export const approvedEngagements = curriculumWeeks.filter(({ engagement }) => engagement.status === "Approved" || engagement.status === "Production Ready");
 export const completedReviewStages = curriculumWeeks.flatMap(({ engagement }) => engagement.reviewWorkflow).filter(({ completed }) => completed);
+export const communicationWorkCompleted = curriculumWeeks.filter(({ engagement }) => engagement.communication.status === "Approved");
+export const communicationEvidenceCaptured = curriculumWeeks.flatMap(({ engagement }) => engagement.communication.evidence).filter(({ reference }) => reference.trim().length > 0);
+export const communicationReviewsCompleted = curriculumWeeks.filter(({ engagement }) => engagement.communication.review.reviewStatus === "Approved");
+export const currentCommunication = currentEngagement.communication;
+export const nextCommunicationArtifact = currentCommunication.evidence.find(({ status }) => status !== "Approved") ?? currentCommunication.evidence.at(-1)!;
 
 export function getWeekStatus(week: CurriculumWeek): WeekStatus {
   if (week.locked) return "Locked";

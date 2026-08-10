@@ -28,9 +28,15 @@ The workspace uses the existing Portfolio Entry as its portfolio source of truth
 
 Dashboard and Progress now derive current engagement information, engagement counts, and review-stage progress from the curriculum model.
 
+### v1.5 — Communication Workspace
+
+Implemented a dedicated, route-addressable Communication Workspace for every weekly consulting engagement. The local engagement model now contains empty, import-ready structures for communication objectives, audience and stakeholder context, written communication, presentation and talkthrough references, communication evidence, reflection, and review.
+
+Communication working context is connected to the consulting workspace and dashboard/progress calculations. Portfolio remains the source of truth for resulting portfolio artifacts and evidence. No communication content, stakeholder scenarios, external integrations, file uploads, automated review, or AI API was implemented.
+
 ## Planned
 
-### v1.5 — Decision Journal & Mentorship (planned)
+### Decision Journal & Mentorship (planned)
 
 Develop the current placeholder structures into practical decision-journal and mentor-review workflows, informed by real learner and mentor needs. No functional journaling, feedback, approval, or revision workflow is implemented today.
 

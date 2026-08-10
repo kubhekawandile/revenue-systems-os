@@ -2,6 +2,15 @@
 
 All notable completed changes to Revenue Systems OS are documented here. Planned work belongs in [ROADMAP.md](ROADMAP.md) and is not listed as completed.
 
+## v1.5 — Communication Workspace
+
+- Added an import-ready Communication Workspace structure to every weekly consulting engagement.
+- Added a dedicated weekly communication route, linked from the Consulting Workspace.
+- Added empty fields for communication objectives, audiences, contexts, written communication, presentations and talkthroughs, evidence, reflections, and reviews.
+- Added local evidence metadata structures for screenshots, documents, presentations, Miro boards, Loom walkthroughs, diagrams, recordings, and other evidence.
+- Added model-driven dashboard communication context and zero-state communication progress metrics.
+- Preserved Portfolio as the source of truth for portfolio artifacts and evidence; no external integrations, uploads, backend, API, authentication, or AI calls were added.
+
 ## v1.4 — Consulting Workspace
 
 - Extended the local curriculum model with a content-ready consulting engagement structure for every week.
