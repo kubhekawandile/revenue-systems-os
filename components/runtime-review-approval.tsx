@@ -1,0 +1,5 @@
+"use client";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { getWeekRuntime, learningProgress, learnerWeekStatus, updateWeekRuntime } from "@/lib/workspace-store";
+export function RuntimeReviewApproval({ week }: { week: number }) { const [approved, setApproved] = useState(false); const [eligible, setEligible] = useState(false); useEffect(() => { const runtime = getWeekRuntime(week); setApproved(runtime.status.reviewApproved === "true"); const progress = learningProgress(runtime); setEligible(progress.total > 0 && progress.complete === progress.total); }, [week]); if (!eligible) return <p className="mt-4 text-sm text-slate-500">Complete all learning steps before recording approval.</p>; return <div className="mt-4 flex items-center gap-3"><Button onClick={() => { const next = !approved; updateWeekRuntime(week, (current) => ({ ...current, status: { ...current.status, reviewApproved: String(next) } })); setApproved(next); }}>{approved ? "Revoke approval" : "Record approval"}</Button><span className="text-sm text-slate-500">{approved ? "Approval recorded locally" : "Approval not yet recorded"}</span></div>; }
